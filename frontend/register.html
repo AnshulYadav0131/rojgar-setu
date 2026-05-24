@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register — Rojgar Setu</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
+      min-height: 100vh;
+    }
+    nav {
+      background: #1a73e8;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo { color: white; font-size: 20px; font-weight: 700; text-decoration: none; }
+    nav .logo span { color: #ffd600; }
+    nav a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }
+
+    .container {
+      max-width: 480px;
+      margin: 48px auto;
+      padding: 0 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px 36px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h2 {
+      font-size: 24px;
+      color: #1a237e;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    /* ROLE TOGGLE */
+    .role-toggle {
+      display: flex;
+      background: #f0f4ff;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+    .role-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.2s;
+    }
+    .role-btn.active {
+      background: #1a73e8;
+      color: white;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+      transition: border 0.2s;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #1a73e8;
+    }
+
+    .worker-only { display: block; }
+    .employer-only { display: none; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { background: #1557b0; }
+    .btn-submit:disabled { background: #aaa; cursor: not-allowed; }
+
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+    .login-link a { color: #1a73e8; text-decoration: none; font-weight: 600; }
+
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+    .alert.success { background: #e8f5e9; color: #2e7d32; display: block; }
+    .alert.error { background: #ffebee; color: #c62828; display: block; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">Rojgar <span>Setu</span></a>
+    <div>
+      <a href="login.html">Login</a>
+      <a href="jobs.html">Jobs देखें</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <h2>Register करें</h2>
+      <p class="subtitle">Rojgar Setu पर आपका स्वागत है — बिल्कुल मुफ्त</p>
+
+      <!-- ROLE TOGGLE -->
+      <div class="role-toggle">
+        <button class="role-btn active" onclick="setRole('worker')">👷 Worker (मुझे काम चाहिए)</button>
+        <button class="role-btn" onclick="setRole('employer')">🏗️ Employer (मुझे मजदूर चाहिए)</button>
+      </div>
+
+      <!-- ALERT -->
+      <div id="alert" class="alert"></div>
+
+      <!-- FORM -->
+      <form id="registerForm">
+        <input type="hidden" id="role" value="worker">
+
+        <div class="form-group">
+          <label>पूरा नाम / Full Name</label>
+          <input type="text" id="full_name" placeholder="जैसे: Ramesh Kumar" required>
+        </div>
+
+        <div class="form-group">
+          <label>मोबाइल नंबर / Phone</label>
+          <input type="tel" id="phone" placeholder="10 digit mobile number" maxlength="10" required>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="कम से कम 6 characters" required>
+        </div>
+
+        <div class="form-group">
+          <label>जिला / District</label>
+          <select id="district">
+            <option value="">-- अपना जिला चुनें --</option>
+            <option>Kanpur Nagar</option>
+            <option>Kanpur Dehat</option>
+            <option>Lucknow</option>
+            <option>Agra</option>
+            <option>Varanasi</option>
+            <option>Prayagraj</option>
+            <option>Meerut</option>
+            <option>Gorakhpur</option>
+            <option>Mathura</option>
+            <option>Bareilly</option>
+            <option>Aligarh</option>
+            <option>Jhansi</option>
+            <option>Moradabad</option>
+            <option>Saharanpur</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>शहर / City</label>
+          <input type="text" id="city" placeholder="जैसे: Kanpur">
+        </div>
+
+        <!-- WORKER ONLY -->
+        <div class="form-group worker-only" id="skillsGroup">
+          <label>आपकी Skills (काम)</label>
+          <input type="text" id="skills" placeholder="जैसे: Electrician, Plumber, Carpenter">
+        </div>
+
+        <button type="button" class="btn-submit" onclick="register()" id="submitBtn">
+          Register करें →
+        </button>
+      </form>
+
+      <div class="login-link">
+        पहले से account है? <a href="login.html">Login करें</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8080';
+
+    // Check URL param for role
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('role') === 'employer') setRole('employer');
+
+    function setRole(role) {
+      document.getElementById('role').value = role;
+      document.querySelectorAll('.role-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', (role === 'worker' && i === 0) || (role === 'employer' && i === 1));
+      });
+      document.getElementById('skillsGroup').style.display = role === 'worker' ? 'block' : 'none';
+    }
+
+    function showAlert(msg, type) {
+      const el = document.getElementById('alert');
+      el.textContent = msg;
+      el.className = 'alert ' + type;
+    }
+
+    async function register() {
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Loading...';
+
+      const body = {
+        full_name: document.getElementById('full_name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        password: document.getElementById('password').value,
+        role: document.getElementById('role').value,
+        city: document.getElementById('city').value.trim(),
+        district: document.getElementById('district').value,
+        skills: document.getElementById('skills').value.trim()
+      };
+
+      if (!body.full_name || !body.phone || !body.password) {
+        showAlert('कृपया सभी जरूरी fields भरें।', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Register करें →';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showAlert('✅ Registration successful! अब Login करें।', 'success');
+          setTimeout(() => window.location.href = 'login.html', 1500);
+        } else {
+          showAlert('❌ ' + (data.detail || 'कुछ गलत हुआ। दोबारा try करें।'), 'error');
+        }
+      } catch (e) {
+        showAlert('❌ Server से connect नहीं हो पाया।', 'error');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Register करें →';
+    }
+  </script>
+
+</body>
+</html>

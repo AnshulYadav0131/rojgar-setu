@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobs — Rojgar Setu</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; }
+
+    nav {
+      background: #1a73e8; padding: 16px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    nav .logo { color: white; font-size: 20px; font-weight: 700; text-decoration: none; }
+    nav .logo span { color: #ffd600; }
+    nav a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }
+    nav .btn-post {
+      background: #ffd600; color: #1a237e;
+      padding: 8px 18px; border-radius: 6px; font-weight: 600;
+    }
+
+    .top-bar {
+      background: white; padding: 20px 32px;
+      display: flex; gap: 12px; align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); flex-wrap: wrap;
+    }
+    .top-bar h2 { font-size: 20px; color: #1a237e; margin-right: 8px; }
+    .top-bar select, .top-bar input {
+      padding: 9px 14px; border: 1.5px solid #ddd;
+      border-radius: 8px; font-size: 14px; outline: none;
+    }
+    .top-bar select:focus, .top-bar input:focus { border-color: #1a73e8; }
+    .btn-search {
+      padding: 9px 20px; background: #1a73e8; color: white;
+      border: none; border-radius: 8px; font-size: 14px;
+      font-weight: 600; cursor: pointer;
+    }
+
+    .container { max-width: 900px; margin: 32px auto; padding: 0 20px; }
+
+    .jobs-count { font-size: 14px; color: #666; margin-bottom: 16px; }
+
+    .job-card {
+      background: white; border-radius: 12px;
+      padding: 24px; margin-bottom: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 16px; flex-wrap: wrap;
+    }
+    .job-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+
+    .job-left { flex: 1; min-width: 200px; }
+    .job-title {
+      font-size: 18px; font-weight: 700;
+      color: #1a237e; margin-bottom: 6px;
+    }
+    .job-meta {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      font-size: 13px; color: #666; margin-bottom: 10px;
+    }
+    .job-meta span { display: flex; align-items: center; gap: 4px; }
+    .job-desc { font-size: 14px; color: #555; line-height: 1.6; }
+
+    .job-right { text-align: right; min-width: 120px; }
+    .job-pay {
+      font-size: 22px; font-weight: 700;
+      color: #2e7d32; margin-bottom: 4px;
+    }
+    .job-pay span { font-size: 13px; font-weight: 400; color: #666; }
+    .job-date { font-size: 12px; color: #999; margin-bottom: 12px; }
+
+    .btn-apply {
+      padding: 10px 24px; background: #1a73e8;
+      color: white; border: none; border-radius: 8px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .btn-apply:hover { background: #1557b0; }
+    .btn-apply.applied {
+      background: #e8f5e9; color: #2e7d32;
+      cursor: default; border: 1px solid #a5d6a7;
+    }
+
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: #999;
+    }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 16px; }
+
+    .loading { text-align: center; padding: 40px; color: #666; font-size: 16px; }
+
+    /* POST JOB MODAL */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+      z-index: 1000; justify-content: center; align-items: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white; border-radius: 16px;
+      padding: 36px; width: 100%; max-width: 480px;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal h3 { font-size: 20px; color: #1a237e; margin-bottom: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: #444; margin-bottom: 6px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid #ddd; border-radius: 8px;
+      font-size: 14px; outline: none; font-family: inherit;
+    }
+    .form-group input:focus, .form-group select:focus,
+    .form-group textarea:focus { border-color: #1a73e8; }
+    .modal-btns { display: flex; gap: 12px; margin-top: 8px; }
+    .btn-cancel {
+      flex: 1; padding: 12px; background: #f5f5f5;
+      border: none; border-radius: 8px; cursor: pointer;
+      font-size: 15px; color: #666;
+    }
+    .btn-post-submit {
+      flex: 2; padding: 12px; background: #1a73e8;
+      color: white; border: none; border-radius: 8px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+    }
+    .alert {
+      padding: 10px 14px; border-radius: 8px;
+      margin-bottom: 16px; font-size: 14px; display: none;
+    }
+    .alert.success { background: #e8f5e9; color: #2e7d32; display: block; }
+    .alert.error { background: #ffebee; color: #c62828; display: block; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">Rojgar <span>Setu</span></a>
+    <div>
+      <a href="#" onclick="openPostJob()" class="btn-post">+ Job Post करें</a>
+      <a href="login.html" id="loginLink">Login</a>
+    </div>
+  </nav>
+
+  <!-- FILTER BAR -->
+  <div class="top-bar">
+    <h2>🔍 Jobs खोजें</h2>
+    <select id="districtFilter">
+      <option value="">सभी जिले</option>
+      <option>Kanpur Nagar</option>
+      <option>Kanpur Dehat</option>
+      <option>Lucknow</option>
+      <option>Agra</option>
+      <option>Varanasi</option>
+      <option>Prayagraj</option>
+      <option>Meerut</option>
+      <option>Gorakhpur</option>
+      <option>Mathura</option>
+      <option>Bareilly</option>
+      <option>Aligarh</option>
+      <option>Jhansi</option>
+      <option>Other</option>
+    </select>
+    <button class="btn-search" onclick="loadJobs()">खोजें</button>
+  </div>
+
+  <!-- JOBS LIST -->
+  <div class="container">
+    <div id="jobsCount" class="jobs-count"></div>
+    <div id="jobsList"><div class="loading">⏳ Jobs load हो रही हैं...</div></div>
+  </div>
+
+  <!-- POST JOB MODAL -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal">
+      <h3>📋 नई Job Post करें</h3>
+      <div id="modalAlert" class="alert"></div>
+
+      <div class="form-group">
+        <label>Job का नाम / Title *</label>
+        <input type="text" id="jobTitle" placeholder="जैसे: Electrician चाहिए 2 दिन के लिए">
+      </div>
+      <div class="form-group">
+        <label>काम का विवरण / Description</label>
+        <textarea id="jobDesc" rows="3" placeholder="काम की details बताएं..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>जिला / District</label>
+        <select id="jobDistrict">
+          <option value="">-- जिला चुनें --</option>
+          <option>Kanpur Nagar</option>
+          <option>Kanpur Dehat</option>
+          <option>Lucknow</option>
+          <option>Agra</option>
+          <option>Varanasi</option>
+          <option>Prayagraj</option>
+          <option>Meerut</option>
+          <option>Gorakhpur</option>
+          <option>Mathura</option>
+          <option>Bareilly</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Location / जगह</label>
+        <input type="text" id="jobLocation" placeholder="जैसे: Kidwai Nagar, Kanpur">
+      </div>
+      <div class="form-group">
+        <label>Daily Pay (₹ per day)</label>
+        <input type="number" id="jobPay" placeholder="जैसे: 500">
+      </div>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closePostJob()">Cancel</button>
+        <button class="btn-post-submit" onclick="postJob()">Job Post करें →</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8080';
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      document.getElementById('loginLink').textContent = 'My Profile';
+      document.getElementById('loginLink').href = '#';
+    }
+
+    async function loadJobs() {
+      const district = document.getElementById('districtFilter').value;
+      let url = `${API}/jobs/`;
+      if (district) url += `?district=${encodeURIComponent(district)}`;
+
+      document.getElementById('jobsList').innerHTML = '<div class="loading">⏳ Jobs load हो रही हैं...</div>';
+
+      try {
+        const res = await fetch(url);
+        const jobs = await res.json();
+
+        if (jobs.length === 0) {
+          document.getElementById('jobsCount').textContent = '';
+          document.getElementById('jobsList').innerHTML = `
+            <div class="empty-state">
+              <div class="icon">😔</div>
+              <p>इस जिले में अभी कोई job नहीं है।<br>बाद में दोबारा check करें।</p>
+            </div>`;
+          return;
+        }
+
+        document.getElementById('jobsCount').textContent = `${jobs.length} jobs मिलीं`;
+        document.getElementById('jobsList').innerHTML = jobs.map(job => `
+          <div class="job-card">
+            <div class="job-left">
+              <div class="job-title">${job.title}</div>
+              <div class="job-meta">
+                ${job.district ? `<span>📍 ${job.district}</span>` : ''}
+                ${job.location ? `<span>🏠 ${job.location}</span>` : ''}
+              </div>
+              ${job.description ? `<div class="job-desc">${job.description}</div>` : ''}
+            </div>
+            <div class="job-right">
+              ${job.daily_pay ? `<div class="job-pay">₹${job.daily_pay}<span>/day</span></div>` : '<div class="job-pay" style="font-size:14px;color:#999">Pay TBD</div>'}
+              <div class="job-date">${new Date(job.created_at).toLocaleDateString('hi-IN')}</div>
+              <button class="btn-apply" onclick="applyJob('${job.id}', this)">
+                Apply करें
+              </button>
+            </div>
+          </div>
+        `).join('');
+
+      } catch (e) {
+        document.getElementById('jobsList').innerHTML = `
+          <div class="empty-state">
+            <div class="icon">⚠️</div>
+            <p>Server से connect नहीं हो पाया।<br>Make sure API is running.</p>
+          </div>`;
+      }
+    }
+
+    async function applyJob(jobId, btn) {
+      if (!token) {
+        alert('Apply करने के लिए पहले Login करें!');
+        window.location.href = 'login.html';
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Applying...';
+      try {
+        const res = await fetch(`${API}/jobs/${jobId}/apply`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await res.json();
+        if (res.ok) {
+          btn.textContent = '✅ Applied!';
+          btn.className = 'btn-apply applied';
+        } else {
+          btn.textContent = data.detail || 'Error';
+          btn.disabled = false;
+        }
+      } catch (e) {
+        btn.textContent = 'Error';
+        btn.disabled = false;
+      }
+    }
+
+    function openPostJob() {
+      if (!token) {
+        alert('Job post करने के लिए पहले Login करें!');
+        window.location.href = 'login.html';
+        return;
+      }
+      document.getElementById('postModal').classList.add('open');
+    }
+
+    function closePostJob() {
+      document.getElementById('postModal').classList.remove('open');
+    }
+
+    function showModalAlert(msg, type) {
+      const el = document.getElementById('modalAlert');
+      el.textContent = msg;
+      el.className = 'alert ' + type;
+    }
+
+    async function postJob() {
+      const body = {
+        title: document.getElementById('jobTitle').value.trim(),
+        description: document.getElementById('jobDesc').value.trim(),
+        district: document.getElementById('jobDistrict').value,
+        location: document.getElementById('jobLocation').value.trim(),
+        daily_pay: parseInt(document.getElementById('jobPay').value) || null
+      };
+
+      if (!body.title) {
+        showModalAlert('Job का title जरूरी है।', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/jobs/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showModalAlert('✅ Job post हो गई!', 'success');
+          setTimeout(() => { closePostJob(); loadJobs(); }, 1200);
+        } else {
+          showModalAlert('❌ ' + (data.detail || 'कुछ गलत हुआ।'), 'error');
+        }
+      } catch (e) {
+        showModalAlert('❌ Server से connect नहीं हो पाया।', 'error');
+      }
+    }
+
+    // Load jobs on page open
+    loadJobs();
+  </script>
+
+</body>
+</html>

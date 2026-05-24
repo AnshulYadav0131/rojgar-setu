@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rojgar Setu — रोजगार सेतु</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    /* NAVBAR */
+    nav {
+      background: #1a73e8;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo {
+      color: white;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    nav .logo span { color: #ffd600; }
+    nav .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: 15px;
+    }
+    nav .nav-links a:hover { text-decoration: underline; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      color: white;
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+    .hero h1 span { color: #ffd600; }
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+    .hero .subtext {
+      font-size: 15px;
+      opacity: 0.7;
+      margin-bottom: 36px;
+    }
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-yellow {
+      background: #ffd600;
+      color: #1a237e;
+    }
+    .btn-yellow:hover { background: #ffca28; }
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+    /* STATS */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      padding: 40px 20px;
+      background: white;
+      flex-wrap: wrap;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat h2 {
+      font-size: 36px;
+      color: #1a73e8;
+      font-weight: 700;
+    }
+    .stat p {
+      font-size: 14px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    /* HOW IT WORKS */
+    .section {
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .section h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #1a237e;
+    }
+    .section .subtitle {
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 15px;
+    }
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 32px 24px;
+      width: 240px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .card .icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+    .card h3 {
+      font-size: 17px;
+      margin-bottom: 8px;
+      color: #1a237e;
+    }
+    .card p {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* CATEGORIES */
+    .categories {
+      background: #e8f0fe;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .categories h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #1a237e;
+    }
+    .categories .subtitle {
+      color: #666;
+      margin-bottom: 36px;
+    }
+    .cat-grid {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .cat-chip {
+      background: white;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #1a73e8;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      cursor: pointer;
+    }
+    .cat-chip:hover {
+      background: #1a73e8;
+      color: white;
+    }
+
+    /* FOR WHOM */
+    .for-whom {
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .for-whom h2 {
+      font-size: 28px;
+      margin-bottom: 40px;
+      color: #1a237e;
+    }
+    .whom-cards {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .whom-card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px 32px;
+      width: 300px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    .whom-card.worker { border-top: 4px solid #1a73e8; }
+    .whom-card.employer { border-top: 4px solid #ffd600; }
+    .whom-card .icon { font-size: 40px; margin-bottom: 16px; }
+    .whom-card h3 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: #1a237e;
+    }
+    .whom-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .whom-card ul li {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+    .whom-card ul li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #1a73e8;
+      font-weight: 700;
+    }
+    .whom-card .btn {
+      margin-top: 24px;
+      width: 100%;
+      text-align: center;
+      font-size: 15px;
+      padding: 12px;
+    }
+    .btn-blue {
+      background: #1a73e8;
+      color: white;
+    }
+    .btn-blue:hover { background: #1557b0; }
+
+    /* FOOTER */
+    footer {
+      background: #1a237e;
+      color: white;
+      text-align: center;
+      padding: 32px 20px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">Rojgar <span>Setu</span></div>
+    <div class="nav-links">
+      <a href="jobs.html">Jobs देखें</a>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>रोजगार <span>सेतु</span></h1>
+    <p>Connecting Daily Workers with Local Employers</p>
+    <p class="subtext">मजदूर और नियोक्ता के बीच का पुल — UP के हर जिले में</p>
+    <div class="hero-buttons">
+      <a href="register.html?role=worker" class="btn btn-yellow">🔨 मुझे काम चाहिए</a>
+      <a href="register.html?role=employer" class="btn btn-outline">📋 मुझे मजदूर चाहिए</a>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <h2>500+</h2>
+      <p>Registered Workers</p>
+    </div>
+    <div class="stat">
+      <h2>200+</h2>
+      <p>Jobs Posted</p>
+    </div>
+    <div class="stat">
+      <h2>75+</h2>
+      <p>Districts Covered</p>
+    </div>
+    <div class="stat">
+      <h2>₹400</h2>
+      <p>Average Daily Pay</p>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section">
+    <h2>यह कैसे काम करता है?</h2>
+    <p class="subtitle">How it works — 3 simple steps</p>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">📝</div>
+        <h3>Register करें</h3>
+        <p>अपना नाम, फोन नंबर और skill भरें। बिल्कुल मुफ्त।</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔍</div>
+        <h3>Job खोजें</h3>
+        <p>अपने जिले में available jobs देखें और apply करें।</p>
+      </div>
+      <div class="card">
+        <div class="icon">💰</div>
+        <h3>काम करें और कमाएं</h3>
+        <p>Employer से directly मिलें और daily pay पाएं।</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="categories">
+    <h2>काम की Categories</h2>
+    <p class="subtitle">Available job categories in your area</p>
+    <div class="cat-grid">
+      <div class="cat-chip">⚡ Electrician</div>
+      <div class="cat-chip">🔧 Plumber</div>
+      <div class="cat-chip">🧱 Mason</div>
+      <div class="cat-chip">🪵 Carpenter</div>
+      <div class="cat-chip">🎨 Painter</div>
+      <div class="cat-chip">🚜 Farm Worker</div>
+      <div class="cat-chip">🏠 House Help</div>
+      <div class="cat-chip">🚛 Driver</div>
+      <div class="cat-chip">🔨 Helper / Mazdoor</div>
+      <div class="cat-chip">🧹 Cleaner</div>
+    </div>
+  </div>
+
+  <!-- FOR WHOM -->
+  <div class="for-whom">
+    <h2>यह किसके लिए है?</h2>
+    <div class="whom-cards">
+      <div class="whom-card worker">
+        <div class="icon">👷</div>
+        <h3>Workers के लिए</h3>
+        <ul>
+          <li>अपने जिले में jobs खोजें</li>
+          <li>Daily pay देखें पहले से</li>
+          <li>एक click में apply करें</li>
+          <li>अपनी availability set करें</li>
+          <li>बिल्कुल मुफ्त — हमेशा</li>
+        </ul>
+        <a href="register.html?role=worker" class="btn btn-blue">Worker बनें →</a>
+      </div>
+      <div class="whom-card employer">
+        <div class="icon">🏗️</div>
+        <h3>Employers के लिए</h3>
+        <ul>
+          <li>Job post करें मिनटों में</li>
+          <li>Local workers तुरंत मिलें</li>
+          <li>Applicants की list देखें</li>
+          <li>अपने district में search करें</li>
+          <li>कोई commission नहीं</li>
+        </ul>
+        <a href="register.html?role=employer" class="btn btn-yellow">Employer बनें →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>🌉 Rojgar Setu — Built for Rural India | Made with ❤️ in UP</p>
+    <p style="margin-top: 8px; opacity: 0.6;">© 2026 Rojgar Setu. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

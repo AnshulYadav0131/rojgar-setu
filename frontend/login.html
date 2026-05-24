@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Rojgar Setu</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; min-height: 100vh; }
+    nav {
+      background: #1a73e8; padding: 16px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    nav .logo { color: white; font-size: 20px; font-weight: 700; text-decoration: none; }
+    nav .logo span { color: #ffd600; }
+    nav a { color: white; text-decoration: none; font-size: 14px; margin-left: 20px; }
+
+    .container { max-width: 440px; margin: 64px auto; padding: 0 20px; }
+    .card {
+      background: white; border-radius: 16px;
+      padding: 40px 36px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h2 { font-size: 24px; color: #1a237e; margin-bottom: 6px; }
+    .subtitle { color: #666; font-size: 14px; margin-bottom: 28px; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 6px; }
+    input {
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid #ddd; border-radius: 8px;
+      font-size: 15px; outline: none;
+    }
+    input:focus { border-color: #1a73e8; }
+    .btn-submit {
+      width: 100%; padding: 14px; background: #1a73e8;
+      color: white; border: none; border-radius: 8px;
+      font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 8px;
+    }
+    .btn-submit:hover { background: #1557b0; }
+    .btn-submit:disabled { background: #aaa; }
+    .register-link { text-align: center; margin-top: 20px; font-size: 14px; color: #666; }
+    .register-link a { color: #1a73e8; text-decoration: none; font-weight: 600; }
+    .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: none; }
+    .alert.success { background: #e8f5e9; color: #2e7d32; display: block; }
+    .alert.error { background: #ffebee; color: #c62828; display: block; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo">Rojgar <span>Setu</span></a>
+    <div>
+      <a href="register.html">Register</a>
+      <a href="jobs.html">Jobs देखें</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <h2>Login करें</h2>
+      <p class="subtitle">अपने account में login करें</p>
+
+      <div id="alert" class="alert"></div>
+
+      <div class="form-group">
+        <label>मोबाइल नंबर / Phone</label>
+        <input type="tel" id="phone" placeholder="10 digit mobile number" maxlength="10">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="आपका password">
+      </div>
+
+      <button class="btn-submit" onclick="login()" id="submitBtn">Login करें →</button>
+
+      <div class="register-link">
+        Account नहीं है? <a href="register.html">Register करें</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8080';
+
+    function showAlert(msg, type) {
+      const el = document.getElementById('alert');
+      el.textContent = msg;
+      el.className = 'alert ' + type;
+    }
+
+    async function login() {
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Loading...';
+
+      const body = {
+        phone: document.getElementById('phone').value.trim(),
+        password: document.getElementById('password').value
+      };
+
+      if (!body.phone || !body.password) {
+        showAlert('कृपया phone और password भरें।', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Login करें →';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          localStorage.setItem('token', data.access_token);
+          showAlert('✅ Login successful! Redirecting...', 'success');
+          setTimeout(() => window.location.href = 'jobs.html', 1000);
+        } else {
+          showAlert('❌ ' + (data.detail || 'गलत phone या password।'), 'error');
+        }
+      } catch (e) {
+        showAlert('❌ Server से connect नहीं हो पाया।', 'error');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Login करें →';
+    }
+  </script>
+</body>
+</html>
