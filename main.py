@@ -1,3 +1,5 @@
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
@@ -33,4 +35,18 @@ app.include_router(users.router, prefix="/users", tags=["Users"])
 
 @app.get("/")
 def root():
-    return {"message": "Rojgar Setu API is running 🚀"}
+    return FileResponse("frontend/index.html")
+
+@app.get("/jobs-page")
+def jobs_page():
+    return FileResponse("frontend/jobs.html")
+
+@app.get("/login")
+def login_page():
+    return FileResponse("frontend/login.html")
+
+@app.get("/register")
+def register_page():
+    return FileResponse("frontend/register.html")
+
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
