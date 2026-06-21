@@ -44,7 +44,6 @@
       margin-bottom: 28px;
     }
 
-    /* ROLE TOGGLE */
     .role-toggle {
       display: flex;
       background: #f0f4ff;
@@ -145,16 +144,13 @@
       <h2>Register करें</h2>
       <p class="subtitle">Rojgar Setu पर आपका स्वागत है — बिल्कुल मुफ्त</p>
 
-      <!-- ROLE TOGGLE -->
       <div class="role-toggle">
         <button class="role-btn active" onclick="setRole('worker')">👷 Worker (मुझे काम चाहिए)</button>
         <button class="role-btn" onclick="setRole('employer')">🏗️ Employer (मुझे मजदूर चाहिए)</button>
       </div>
 
-      <!-- ALERT -->
       <div id="alert" class="alert"></div>
 
-      <!-- FORM -->
       <form id="registerForm">
         <input type="hidden" id="role" value="worker">
 
@@ -200,7 +196,6 @@
           <input type="text" id="city" placeholder="जैसे: Kanpur">
         </div>
 
-        <!-- WORKER ONLY -->
         <div class="form-group worker-only" id="skillsGroup">
           <label>आपकी Skills (काम)</label>
           <input type="text" id="skills" placeholder="जैसे: Electrician, Plumber, Carpenter">
@@ -218,9 +213,8 @@
   </div>
 
   <script>
-    const API = 'http://localhost:8080';
+    const API = window.location.origin;
 
-    // Check URL param for role
     const params = new URLSearchParams(window.location.search);
     if (params.get('role') === 'employer') setRole('employer');
 
@@ -270,7 +264,7 @@
 
         if (res.ok) {
           showAlert('✅ Registration successful! अब Login करें।', 'success');
-          setTimeout(() => window.location.href = 'login.html', 1500);
+          setTimeout(() => window.location.href = '/login', 1500);
         } else {
           showAlert('❌ ' + (data.detail || 'कुछ गलत हुआ। दोबारा try करें।'), 'error');
         }

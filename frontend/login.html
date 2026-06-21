@@ -78,7 +78,7 @@
   </div>
 
   <script>
-    const API = 'http://localhost:8080';
+    const API = window.location.origin;
 
     function showAlert(msg, type) {
       const el = document.getElementById('alert');
@@ -114,7 +114,7 @@
         if (res.ok) {
           localStorage.setItem('token', data.access_token);
           showAlert('✅ Login successful! Redirecting...', 'success');
-          setTimeout(() => window.location.href = 'jobs.html', 1000);
+          setTimeout(() => window.location.href = '/jobs-page', 1000);
         } else {
           showAlert('❌ ' + (data.detail || 'गलत phone या password।'), 'error');
         }
